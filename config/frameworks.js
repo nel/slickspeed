@@ -1,8 +1,18 @@
 SlickSpeed.frameworks = [
   {
+    name: "MooTools",
+    method: "$$",
+    file: "mootools.js"
+  },
+  {
     name: "Prototype",
     method: "$$",
     file: "prototype.js"
+  },
+  {
+    name: "Dojo",
+    method: "dojo.query",
+    file: "dojo.js"
   },
   {
     name: "JQuery",
