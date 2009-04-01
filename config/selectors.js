@@ -1,4 +1,4 @@
-SlickSpeed.selectors = [
+window.selectors = [
 "body",
 "div",
 "body div",

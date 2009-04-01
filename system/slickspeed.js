@@ -14,7 +14,7 @@ var SlickSpeed = (function() {
       var iframe = document.createElement('IFrame');
       iframe.setAttribute('name',framework.name);
       var src = 'template.html?framework='
-              + framework.name
+              + framework.id
               + '&nocache='
               + Math.random();
       iframe.setAttribute('src',src);
@@ -146,8 +146,8 @@ var SlickSpeed = (function() {
   };
   
   return {
-    frameworks: null,
-    selectors: null,
+    frameworks: window.frameworks,
+    selectors: window.selectors,
     forEach: forEach,
     buildFrames: buildFrames,
     load: load

@@ -34,8 +34,6 @@ SlickSpeed = (function(){
   
   //callback launch when js framework loaded
   function when_script_loaded() {
-    //could raise
-    SlickSpeed.frameworkMethod = eval(SlickSpeed.frameworkMethod);
   };
   
   function get_length(elements){
@@ -44,14 +42,15 @@ SlickSpeed = (function(){
 
   function test(selector){
   	try {
+  	  var frameworkMethod = eval(SlickSpeed.frameworkMethod);
   		var start = new Date().getTime();
   		var i = 1;
-  		var elements = SlickSpeed.frameworkMethod(selector);
-  		i ++; SlickSpeed.frameworkMethod(selector);
-  		i ++; SlickSpeed.frameworkMethod(selector);
-  		i ++; SlickSpeed.frameworkMethod(selector);
-  		i ++; SlickSpeed.frameworkMethod(selector);
-  		i ++; SlickSpeed.frameworkMethod(selector);
+  		var elements = frameworkMethod(selector);
+  		i ++; frameworkMethod(selector);
+  		i ++; frameworkMethod(selector);
+  		i ++; frameworkMethod(selector);
+  		i ++; frameworkMethod(selector);
+  		i ++; frameworkMethod(selector);
   		var end = ((new Date().getTime() - start) / i);
   		return {'time': Math.round(end), 'found': get_length(elements)};
   	} catch(err){
@@ -63,21 +62,25 @@ SlickSpeed = (function(){
   function setup() {
     var framework = get_url_param('framework');
     var f = SlickSpeed.frameworks;
-    var src = '';
+    var id = '';
+    var version = '1';
     for(var i in f) {
-      if (f[i].name == framework) {
+      if (f[i].id == framework) {
         SlickSpeed.frameworkMethod = f[i].method;
-        src = './frameworks/'+ f[i].file;
+        id = f[i].id;
+        if (f[i].version) version =  f[i].version;
       }
     };
-    if (!framework || !src || !SlickSpeed.frameworkMethod) return;
-    load_script(src, when_script_loaded);
+    if (!framework || !id || !SlickSpeed.frameworkMethod) return;
+    google.load(id, version, {uncompressed:true});
+    google.setOnLoadCallback(when_script_loaded);
   };
   
   return {
+    frameworks: window.frameworks,
     setup: setup,
     test: test
   };
 })();
 
-window.onload = SlickSpeed.setup;
+SlickSpeed.setup();
