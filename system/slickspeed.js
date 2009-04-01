@@ -9,17 +9,14 @@ function buildFrames() {
   forEach(window.frameworks, function(framework) {
     var iframe = document.createElement('IFrame');
     iframe.setAttribute('name',framework.name);
-    var src = 'system/template.php?include='
-            + framework.file
-            + '&function='
-            + framework.method
+    var src = 'template.html?framework='
+            + framework.name
             + '&nocache='
             + Math.random();
     iframe.setAttribute('src',src);
     frame_container.appendChild(iframe);
   });
 };
-
 
 
 //test start
