@@ -4,6 +4,24 @@ function forEach(iterable, fn, bind){
 	for (var i = 0, j = iterable.length; i < j; i++) fn.call(bind, iterable[i], i, iterable);
 };
 
+function buildFrames() {
+  var frame_container = document.getElementById('frames');
+  forEach(window.frameworks, function(framework) {
+    var iframe = document.createElement('IFrame');
+    iframe.setAttribute('name',framework.name);
+    var src = 'system/template.php?include='
+            + framework.file
+            + '&function='
+            + framework.method
+            + '&nocache='
+            + Math.random();
+    iframe.setAttribute('src',src);
+    frame_container.appendChild(iframe);
+  });
+};
+
+
+
 //test start
 
 window.onload = function load(){
