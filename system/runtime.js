@@ -1,48 +1,24 @@
 SlickSpeed = (function(){  
-  //This is a basic function to load js script in head supporting 
-  //callback when script is load
-  //the callback will work on firefox, Opera, safari 3.X and ie
-  function load_script(src, callback) {
-    var head = document.getElementsByTagName('head')[0];
-    var script = document.createElement('script');
-    script.setAttribute('type', 'text/javascript');
-    script.setAttribute('src', src);
-    if (callback) {
-      if (/KHTML/.test(navigator.userAgent))
-        script.addEventListener("load", callback);
-      else if (/MSIE/.test(navigator.userAgent)) {
-        script.onreadystatechange = function() {
-            var rs = this.readyState;
-            if ("loaded" === rs || "complete" === rs) {
-                n.onreadystatechange = null;
-                callback();
-            }
-        };
-      } 
-      else
-        script.onload = callback;
-    }
-    head.appendChild(script);
-  };
-  
   //grab a param from current location url
   function get_url_param(param_name) {
     var regex = new RegExp( "[\\?&]"+param_name+"=([^&#]*)" );
     var results = regex.exec( window.location.href );
-    return (results == null) ? "" : results[1]; 
-  };
-  
-  //callback launch when js framework loaded
-  function when_script_loaded() {
+    return (results == null) ? "" :  decodeURIComponent(results[1]); 
   };
   
   function get_length(elements){
   	return (typeof elements.length == 'function') ? elements.length() : elements.length;
   };
-
+  
+  //Naive implementation, feel free to implement a new one
+  //it seems to have no effect on benchmark
+  function getFrameworkMethod() {
+    return eval(SlickSpeed.frameworkMethod);
+  }
+  
   function test(selector){
   	try {
-  	  var frameworkMethod = eval(SlickSpeed.frameworkMethod);
+  	  var frameworkMethod = getFrameworkMethod();
   		var start = new Date().getTime();
   		var i = 1;
   		var elements = frameworkMethod(selector);
@@ -59,27 +35,42 @@ SlickSpeed = (function(){
   	}
   };
   
+  /* remove callback implementation as it is unnecessary and break crossbrowser compat
+    if you experiment race conditions (test launched when lib not yet available then a lock will have to be implement though callback) */
+  function loadFromFile(file) {
+    var head = document.getElementsByTagName('head')[0];
+    var script = document.createElement('script');
+    script.setAttribute('type', 'text/javascript');
+    script.setAttribute('src', file);
+    head.appendChild(script);
+  }
+  
+  /* no callback see loadFromFile comment */
+  function loadFromGoogleJsapi(id, version) {
+    google.load(id, version);
+  }
+  
   function setup() {
     var framework = get_url_param('framework');
     var f = SlickSpeed.frameworks;
-    var id = '';
-    var version = '1';
     for(var i in f) {
-      if (f[i].id == framework) {
+      if (f[i].name == framework) {
         SlickSpeed.frameworkMethod = f[i].method;
-        id = f[i].id;
-        if (f[i].version) version =  f[i].version;
+        if (f[i].file)
+          loadFromFile('./frameworks/' + f[i].file);
+        else if (f[i].id)
+          loadFromGoogleJsapi(f[i].id, f[i].version || '1', {uncompressed:true});
+        else
+          alert('framework not found');
       }
     };
-    if (!framework || !id || !SlickSpeed.frameworkMethod) return;
-    google.load(id, version, {uncompressed:true});
-    google.setOnLoadCallback(when_script_loaded);
   };
   
   return {
     frameworks: window.frameworks,
     setup: setup,
-    test: test
+    test: test,
+    getFrameworkMethod: getFrameworkMethod
   };
 })();
 

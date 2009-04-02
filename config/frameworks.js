@@ -1,9 +1,9 @@
 window.frameworks = [
   {
-    name: "MooTools stable",
+    name: "MooTools 1.2.1",
     method: "$$",
     id: "mootools",
-    version: "1"
+    version: "1.2.1"
   },
   {
     name: "Prototype stable",
@@ -20,24 +20,44 @@ window.frameworks = [
   {
     name: "JQuery stable",
     method: "jQuery",
-    id: "jquery",
-    version: "1"
+    file: "jquery.js"
   }
 ]
 
 /*
-just add a framework here following the conventions to add another framework, this is just a Json array of hash.
-the function parameter is to choose the right css selector function name
-the id param is the id of the framework according to google jsapi
-and the version param is the version you want (1 means lastest version of the 1 branch)
+This is the js frameworks configuration file. Edit this file to add/remove frameworks to test against.
 
-Drawbacks:
-the yui version available though google js api does not seems to have the YAHOO.Util.Selector part :/
+This file is in JSON format, there are two way to load frameworks:
+
+ - using the google jsapi (see http://code.google.com/apis/ajaxlibs/documentation/index.html for list of supported frameworks). The advantage of jsapi loading is that frameworks gets updated automatiquely or you can choose whatever version in a few seconds.
+ 
+To load from jsapi the statement is:
 
 {
-  name: "MooTools",
-  method: "$$",
-  file: "mootools.js"
+  name: "Dojo stable",    //unique name of this framework version
+  method: "dojo.query",   //selector method to be used
+  id: "dojo",             //framework identifier (see google jsapi doc)
+  version: "1"            //version to be loaded (see google jsapi doc), 1 mean that latest stable of the 1.x branch will be loaded
+}
+ 
+Drawbacks:
+  * Not all library are supported (ext.js ?)
+  * YUI frameworks though jsapi does not seems to have selector lib included
+  * mootools version 1 seems to load mootools 1.1.0 instead of 1.2.1 weird
+  * big brother is watching you
+
+ - using files in ./frameworks folder, just put any js framework in that folder and add it in this conf file. This is great but js framework update quickly so if you want your benchs to stay up to date you will have to work :)
+
+To load from ./frameworks folder declaration is:
+
+{
+  name: "JQuery stable",  //unique name of this framework version
+  method: "jQuery",       //selector method to be used
+  file: "jquery.js"       //filename should be located at ./frameworks/<file>
 }
 
+Drawbacks:
+  * R you sure you are up to date ?
+  * R you sure you have all security fix ?
+  * R you sure you want to get beaten by competitors framework cause you are not up to date ?
 */
