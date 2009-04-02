@@ -7,7 +7,7 @@ SlickSpeed = (function(){
   };
   
   function get_length(elements){
-  	return (typeof elements.length == 'function') ? elements.length() : elements.length;
+    return (typeof elements.length == 'function') ? elements.length() : elements.length;
   };
   
   /*  Naive implementation, it could be improved by parsing the namespace to preserve
@@ -21,17 +21,17 @@ SlickSpeed = (function(){
   
   function test(selector){
     try {
-  	  document.frameworkMethod = getFrameworkMethod();
-  		var start = new Date().getTime();
-  		var i = 1;
-  		var elements = document.frameworkMethod(selector);
-  		i ++; document.frameworkMethod(selector);
-  		i ++; document.frameworkMethod(selector);
-  		i ++; document.frameworkMethod(selector);
-  		i ++; document.frameworkMethod(selector);
-  		i ++; document.frameworkMethod(selector);
-  		var end = ((new Date().getTime() - start) / i);
-  		return {'time': Math.round(end), 'found': get_length(elements)};
+      document.frameworkMethod = getFrameworkMethod();
+      var start = new Date().getTime();
+      var i = 1;
+      var elements = document.frameworkMethod(selector);
+      i ++; document.frameworkMethod(selector);
+      i ++; document.frameworkMethod(selector);
+      i ++; document.frameworkMethod(selector);
+      i ++; document.frameworkMethod(selector);
+      i ++; document.frameworkMethod(selector);
+      var end = ((new Date().getTime() - start) / i);
+      return {'time': Math.round(end), 'found': get_length(elements)};
     } catch(err){
       if (elements == undefined) elements = {length: -1};
       return ({'time': (new Date().getTime() - start) / i, 'found': get_length(elements), 'error': err});
