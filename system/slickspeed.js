@@ -10,11 +10,11 @@ var SlickSpeed = (function() {
   
   function buildFrames() {
     var frame_container = document.getElementById('frames');
-    forEach(SlickSpeed.frameworks, function(framework) {
+    forEach(SlickSpeed.frameworks, function(framework,i) {
       var iframe = document.createElement('IFrame');
       iframe.setAttribute('name',framework.name);
       var src = 'template.html?framework='
-              + framework.name
+              + i
               + '&nocache='
               + Math.random();
       iframe.setAttribute('src',src);

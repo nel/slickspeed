@@ -17,7 +17,7 @@ SlickSpeed = (function(){
   }
   
   function test(selector){
-  	try {
+    try {
   	  var frameworkMethod = getFrameworkMethod();
   		var start = new Date().getTime();
   		var i = 1;
@@ -29,10 +29,10 @@ SlickSpeed = (function(){
   		i ++; frameworkMethod(selector);
   		var end = ((new Date().getTime() - start) / i);
   		return {'time': Math.round(end), 'found': get_length(elements)};
-  	} catch(err){
-  		if (elements == undefined) elements = {length: -1};
-  		return ({'time': (new Date().getTime() - start) / i, 'found': get_length(elements), 'error': err});
-  	}
+    } catch(err){
+      if (elements == undefined) elements = {length: -1};
+      return ({'time': (new Date().getTime() - start) / i, 'found': get_length(elements), 'error': err});
+    }
   };
   
   /* remove callback implementation as it is unnecessary and break crossbrowser compat
@@ -52,18 +52,15 @@ SlickSpeed = (function(){
   
   function setup() {
     var framework = get_url_param('framework');
-    var f = SlickSpeed.frameworks;
-    for(var i in f) {
-      if (f[i].name == framework) {
-        SlickSpeed.frameworkMethod = f[i].method;
-        if (f[i].file)
-          loadFromFile('./frameworks/' + f[i].file);
-        else if (f[i].id)
-          loadFromGoogleJsapi(f[i].id, f[i].version || '1', {uncompressed:true});
-        else
-          alert('framework not found');
-      }
-    };
+    if(!framework) return;
+    var f = SlickSpeed.frameworks[parseInt(framework)];
+    SlickSpeed.frameworkMethod = f.method;
+    if (f.file)
+      loadFromFile('./frameworks/' + f.file);
+    else if (f.id)
+      loadFromGoogleJsapi(f.id, f.version || '1');
+    else
+      alert('framework not found');
   };
   
   return {
