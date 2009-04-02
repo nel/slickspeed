@@ -1,7 +1,7 @@
 window.frameworks = [
   {
     name: "MooTools 1.2.1",
-    method: "$$",
+    method: "document.getElements",
     id: "mootools",
     version: "1.2.1"
   },
@@ -20,7 +20,12 @@ window.frameworks = [
   {
     name: "JQuery stable",
     method: "jQuery",
-    file: "jquery.js"
+    id: "jquery",
+    version: "1"
+  },
+  {
+    name: "Native querySelectorAll",
+    method: "document.querySelectorAll"
   }
 ]
 
@@ -60,4 +65,11 @@ Drawbacks:
   * R you sure you are up to date ?
   * R you sure you have all security fix ?
   * R you sure you want to get beaten by competitors framework cause you are not up to date ?
+
+ - You don't want to load framework ? Ok just don't use options
+ {
+   name: "Native querySelectorAll",
+   method: "document.querySelectorAll"
+ }
+
 */

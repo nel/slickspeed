@@ -10,23 +10,26 @@ SlickSpeed = (function(){
   	return (typeof elements.length == 'function') ? elements.length() : elements.length;
   };
   
-  //Naive implementation, feel free to implement a new one
-  //it seems to have no effect on benchmark
+  /*  Naive implementation, it could be improved by parsing the namespace to preserve
+      the binding, currently the binding is document to work with document.querySelector
+      or document.getElements. But at one point framework could depend on their namespace binding,
+      so it will require to parse the method and extract binding from method
+      Currently everything should work fine and it does not seems to add overhead to benchmark  */
   function getFrameworkMethod() {
     return eval(SlickSpeed.frameworkMethod);
   }
   
   function test(selector){
     try {
-  	  var frameworkMethod = getFrameworkMethod();
+  	  document.frameworkMethod = getFrameworkMethod();
   		var start = new Date().getTime();
   		var i = 1;
-  		var elements = frameworkMethod(selector);
-  		i ++; frameworkMethod(selector);
-  		i ++; frameworkMethod(selector);
-  		i ++; frameworkMethod(selector);
-  		i ++; frameworkMethod(selector);
-  		i ++; frameworkMethod(selector);
+  		var elements = document.frameworkMethod(selector);
+  		i ++; document.frameworkMethod(selector);
+  		i ++; document.frameworkMethod(selector);
+  		i ++; document.frameworkMethod(selector);
+  		i ++; document.frameworkMethod(selector);
+  		i ++; document.frameworkMethod(selector);
   		var end = ((new Date().getTime() - start) / i);
   		return {'time': Math.round(end), 'found': get_length(elements)};
     } catch(err){
@@ -35,8 +38,9 @@ SlickSpeed = (function(){
     }
   };
   
-  /* remove callback implementation as it is unnecessary and break crossbrowser compat
-    if you experiment race conditions (test launched when lib not yet available then a lock will have to be implement though callback) */
+  /*  remove callback implementation as it is unnecessary and break crossbrowser compat
+      if you experiment race conditions (test launched when lib not yet available then a lock
+      will have to be implement though callback) */
   function loadFromFile(file) {
     var head = document.getElementsByTagName('head')[0];
     var script = document.createElement('script');
@@ -45,7 +49,7 @@ SlickSpeed = (function(){
     head.appendChild(script);
   }
   
-  /* no callback see loadFromFile comment */
+  /*  no callback see loadFromFile comment */
   function loadFromGoogleJsapi(id, version) {
     google.load(id, version);
   }
@@ -56,11 +60,10 @@ SlickSpeed = (function(){
     var f = SlickSpeed.frameworks[parseInt(framework)];
     SlickSpeed.frameworkMethod = f.method;
     if (f.file)
-      loadFromFile('./frameworks/' + f.file);
+      return loadFromFile('./frameworks/' + f.file);
     else if (f.id)
-      loadFromGoogleJsapi(f.id, f.version || '1');
-    else
-      alert('framework not found');
+      return loadFromGoogleJsapi(f.id, f.version || '1');
+    //no file framework not found
   };
   
   return {
